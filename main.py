@@ -7,7 +7,14 @@ from email.message import EmailMessage
 import time
 from keep_alive import keep_alive
 import pytz
+from matplotlib.pyplot import plot, draw, show
+import matplotlib.pyplot as plt
 
+
+recorded_prices_black = []
+recorded_prices = []
+recorded_prices_blue = []
+time_stamps = []
 
 keep_alive()
 # Setting up a list of products to track
@@ -51,7 +58,8 @@ def send_email(product):
     print(f"Email sent for {product['name']}")
 
 # Creating a function to check price
-def check_price(product):
+def check_price(product,n):
+    count = n
     # Getting the product page using requests
     response = requests.get(product["url"])
     # Parsing the HTML using BeautifulSoup
@@ -59,9 +67,7 @@ def check_price(product):
     #print(soup.prettify())
     # Finding the price element using class name
     price_element = soup.find("div", {"class": "_30jeq3 _16Jk6d"}).get_text(strip=True)
-    #print(price_element)
-    #price_text = price_element.text[1:]
-    #print(price_element)
+
     # Extracting the price text and removing commas and rupee symbol
     price_element = price_element.replace(",", "").replace("₹", "")
     # Converting the price text to a float value
@@ -84,16 +90,37 @@ def check_price(product):
 
         # Format the time as a string and print it
         print("Time:", datetime_IN.strftime("%H:%M:%S"))
+        #recorded_prices.append(price_value)
         # Returning False to indicate that the email was not sent
+        if (count%2) == 0:
+          recorded_prices_blue.append(price_value)
+         
+          plt.plot(time_stamps, recorded_prices_blue, color = 'blue')
+          #time_stamps.append(datetime.now())
+          
+        else :
+         recorded_prices_black.append(price_value) 
+         time_stamps.append(datetime_IN)
+       
+         plt.plot(time_stamps, recorded_prices_black, color = 'black')
+ 
+        
+        
+        plt.xlabel("Time")
+        plt.ylabel("Price")
+        plt.title("Recorded Prices over Time")
+        plt.show(block=False)
+        plt.pause(1)
         return False
 
-
+n=0
 # Creating a while loop to run the code repeatedly
 while True:
     # Looping through each product in the list
     for product in products:
+        n=n+1
         # Checking the price of the product and storing the result
-        result = check_price(product)
+        result = check_price(product,n)
         # Removing the product from the list if the email was sent
         if result:
             products.remove(product)
