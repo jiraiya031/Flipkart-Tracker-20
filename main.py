@@ -6,7 +6,7 @@ import smtplib
 from email.message import EmailMessage
 import time
 from keep_alive import keep_alive
-
+import os
 import pytz
 from openpyxl import load_workbook
 from openpyxl import Workbook
@@ -49,11 +49,14 @@ products = [
     }
     
 ]
-
+my_secret1 = os.environ['email_id']
+my_secret2 = os.environ['r_email']
+my_secret3 = os.environ['s_password']
 # Setting up email details
-sender_email = "satyam1005@yahoo.in"
-sender_password = "xpgpnszxnsbwfslw"
-receiver_email = "gsatyam1005@gmail.com"
+print(my_secret1, my_secret2, my_secret3)
+sender_email = my_secret1
+sender_password = my_secret3
+receiver_email = my_secret2
 
 # Creating an email message object
 msg = EmailMessage()
