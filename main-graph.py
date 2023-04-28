@@ -8,6 +8,7 @@ import time
 from keep_alive import keep_alive
 import pytz
 import matplotlib.pyplot as plt
+import os
 
 
 recorded_prices_black = []
@@ -30,11 +31,14 @@ products = [
     }
     
 ]
-
+my_secret1 = os.environ['email_id']
+my_secret2 = os.environ['r_email']
+my_secret3 = os.environ['s_password']
 # Setting up email details
-sender_email = "satyam1005@yahoo.in"
-sender_password = "xpgpnszxnsbwfslw"
-receiver_email = "gsatyam1005@gmail.com"
+
+sender_email = my_secret1
+sender_password = my_secret3
+receiver_email = my_secret2
 
 # Creating an email message object
 msg = EmailMessage()

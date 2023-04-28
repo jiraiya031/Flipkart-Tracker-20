@@ -40,7 +40,7 @@ products = [
     {
         "name": "SONY WH-XB910N Black",
         "url": "https://www.flipkart.com/sony-wh-xb910n-active-noise-cancellation-enabled-bluetooth-headset/p/itmd6a2096146f4d?pid=ACCGBHRAFRJAPTSX&lid",
-        "target_price": 12000
+        "target_price": 1000
     },
     {
         "name": "SONY WH-XB910N Blue",
@@ -53,7 +53,7 @@ my_secret1 = os.environ['email_id']
 my_secret2 = os.environ['r_email']
 my_secret3 = os.environ['s_password']
 # Setting up email details
-print(my_secret1, my_secret2, my_secret3)
+
 sender_email = my_secret1
 sender_password = my_secret3
 receiver_email = my_secret2
