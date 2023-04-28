@@ -6,27 +6,45 @@ import smtplib
 from email.message import EmailMessage
 import time
 from keep_alive import keep_alive
+
 import pytz
-from matplotlib.pyplot import plot, draw, show
-import matplotlib.pyplot as plt
+from openpyxl import load_workbook
+from openpyxl import Workbook
 
 
-recorded_prices_black = []
-recorded_prices = []
-recorded_prices_blue = []
-time_stamps = []
+filename = 'Price_Tracker.xlsx'
+price_black =[]
+price_blue =[]
+time_stamp = []
 
-keep_alive()
-# Setting up a list of products to track
+try:
+    # Load the existing workbook
+    workbook = load_workbook(filename)
+    # Select the active worksheet
+    worksheet = workbook.active
+    # Determine the row to start appending new data
+    start_row = worksheet.max_row + 1
+except FileNotFoundError:
+    # Create a new workbook and worksheet if the file doesn't exist
+    workbook = Workbook()
+    worksheet = workbook.active
+    print("book created")
+    # Add headers to the worksheet
+    worksheet.cell(row=1, column=1, value='Black Heaphone Price')
+    worksheet.cell(row=1, column=2, value='Bue Headphone Price')
+    worksheet.cell(row=1, column=3, value='Time')
+    # Start appending new data from the second row
+    start_row = 2
+
 products = [
     {
         "name": "SONY WH-XB910N Black",
-        "url": "https://www.flipkart.com/sony-wh-xb910n-active-noise-cancellation-enabled-bluetooth-headset/p/itmd6a2096146f4d?pid=ACCGBHRAFRJAPTSX&lid=LSTACCGBHRAFRJAPTSXYCZHWT&marketplace=FLIPKART&sattr[]=color&st=color",
+        "url": "https://www.flipkart.com/sony-wh-xb910n-active-noise-cancellation-enabled-bluetooth-headset/p/itmd6a2096146f4d?pid=ACCGBHRAFRJAPTSX&lid",
         "target_price": 12000
     },
     {
         "name": "SONY WH-XB910N Blue",
-        "url": "https://www.flipkart.com/sony-wh-xb910n-active-noise-cancellation-enabled-bluetooth-headset/p/itm668d0bbb72e6b?pid=ACCGBHRANHMKRMDP&lid=LSTACCGBHRANHMKRMDPVSEZMG&marketplace=FLIPKART&sattr[]=color&st=color",
+        "url": "https://www.flipkart.com/sony-wh-xb910n-active-noise-cancellation-enabled-bluetooth-headset/p/itm668d0bbb72e6b",
         "target_price": 12000
     }
     
@@ -57,6 +75,8 @@ def send_email(product):
     # Printing a confirmation message
     print(f"Email sent for {product['name']}")
 
+
+
 # Creating a function to check price
 def check_price(product,n):
     count = n
@@ -85,36 +105,38 @@ def check_price(product,n):
        
         tz_IN = pytz.timezone('Asia/Calcutta') 
 
-        # Get the current time in New York
+        # Get the current time in India
         datetime_IN = datetime.now(tz_IN)
-
+        datetime_IN = datetime_IN.strftime('%Y-%m-%d %H:%M:%S')
         # Format the time as a string and print it
-        print("Time:", datetime_IN.strftime("%H:%M:%S"))
-        #recorded_prices.append(price_value)
-        # Returning False to indicate that the email was not sent
+        print("Time:", datetime_IN)
         if (count%2) == 0:
-          recorded_prices_blue.append(price_value)
-         
-          plt.plot(time_stamps, recorded_prices_blue, color = 'blue')
-          #time_stamps.append(datetime.now())
-          
-        else :
-         recorded_prices_black.append(price_value) 
-         time_stamps.append(datetime_IN)
-       
-         plt.plot(time_stamps, recorded_prices_black, color = 'black')
+          price_blue.append(price_value)
  
-        
-        
-        plt.xlabel("Time")
-        plt.ylabel("Price")
-        plt.title("Recorded Prices over Time")
-        plt.show(block=False)
-        plt.pause(1)
-        return False
+        else :
+         price_black.append(price_value) 
+         time_stamp.append(datetime_IN)
 
-n=0
+        #print(price_black)
+        #print(price_blue)
+        #print(time_stamp)
+    for i, (price1, price2, time_data) in enumerate(zip(price_black, price_blue, time_stamp)):
+        worksheet.cell(row=start_row+i, column=1, value=price1)
+        worksheet.cell(row=start_row+i, column=2, value=price2)
+        worksheet.cell(row=start_row+i, column=3, value=time_data)
+    workbook.save(filename)
+    #app.run()
+    #upload()
+   
+        # Returning False to indicate that the email was not sent
+    return False
+
+
+
+keep_alive()
 # Creating a while loop to run the code repeatedly
+n = 0
+print("test")
 while True:
     # Looping through each product in the list
     for product in products:
@@ -124,9 +146,13 @@ while True:
         # Removing the product from the list if the email was sent
         if result:
             products.remove(product)
+    #create_graph_from_excel()
+    #plt.show(block=False)
     time.sleep(1000)
+    
     # Breaking the loop if there are no more products to check
     if len(products) == 0:
         print(len(products))
         print("no products")
         break
+      

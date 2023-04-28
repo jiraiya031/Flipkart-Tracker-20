@@ -213,6 +213,14 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "et-xmlfile"
+version = "1.1.0"
+description = "An implementation of lxml.xmlfile for the standard library"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "flask"
 version = "2.2.2"
 description = "A simple framework for building complex web applications."
@@ -364,6 +372,17 @@ description = "Fundamental package for array computing in Python"
 category = "main"
 optional = false
 python-versions = ">=3.8"
+
+[[package]]
+name = "openpyxl"
+version = "3.1.2"
+description = "A Python library to read/write Excel 2010 xlsx/xlsm files"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+et-xmlfile = "*"
 
 [[package]]
 name = "packaging"
@@ -739,7 +758,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.10.0,<3.11"
-content-hash = "64dd817ff97bacca63c1a716e3eea65fa475b3fe6ac73725e3a3be534deaa301"
+content-hash = "613730e0a67c14d25b2fb84211e985ed8631a7988ee24b90543537931edc1672"
 
 [metadata.files]
 aiohttp = []
@@ -759,6 +778,7 @@ contourpy = []
 cryptography = []
 cycler = []
 debugpy = []
+et-xmlfile = []
 flask = []
 fonttools = []
 frozenlist = []
@@ -772,6 +792,7 @@ markupsafe = []
 matplotlib = []
 multidict = []
 numpy = []
+openpyxl = []
 packaging = []
 parso = []
 passlib = []
